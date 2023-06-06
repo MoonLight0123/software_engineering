@@ -10,11 +10,11 @@
     <table class="table table-striped"  >
         <thead>
         <tr>
-            <th colspan="5" style="text-align:left ;font-size: 20px"><button class="line btn btn-primary btn-sm" onclick="add()" >添加班级</button>&nbsp;&nbsp;&nbsp;</th>
+            <th colspan="5" style="text-align:left ;font-size: 20px"><button class="line btn btn-primary btn-sm" onclick="add()" >添加试卷类型</button>&nbsp;&nbsp;&nbsp;</th>
         </tr>
         <tr>
             <th>编号</th>
-            <th>课程名称</th>
+            <th>试卷类型</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -50,7 +50,7 @@
                 <div class="modal-body">
                     <input name="classid" id="classid1" hidden="hidden"/>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">班级名称</label>
+                        <label class="col-sm-2 control-label">试卷类型</label>
                         <div class="col-sm-10">
                             <input type="text" name="classname" class="form-control" id="classname1">
                             <span class="help-block"></span>
@@ -95,12 +95,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="my" style="text-align:center">添加班级</h4>
+                <h4 class="modal-title" id="my" style="text-align:center">添加试卷类型</h4>
             </div>
             <form class="form-horizontal" th:action="@{/addClass}" method="post">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">班级名称</label>
+                        <label class="col-sm-2 control-label">试卷类型</label>
                         <div class="col-sm-10">
                             <input type="text" name="classname" class="form-control" id="classname">
                             <span class="help-block"></span>
