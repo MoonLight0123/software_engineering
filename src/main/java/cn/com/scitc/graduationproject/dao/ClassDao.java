@@ -10,6 +10,7 @@ public interface ClassDao extends CrudRepository<Pjclass,String> {
     @Query(value ="select * from pjclass where classid =?", nativeQuery = true)
     Pjclass findByClassid(Integer classid);
 
+    
     @Modifying
     @Transactional
     @Query(value="delete from pjclass where classid = ?",nativeQuery = true)
