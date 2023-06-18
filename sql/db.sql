@@ -1,248 +1,455 @@
-/*
-Navicat MySQL Data Transfer
+-- phpMyAdmin SQL Dump
+-- version 4.8.5
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Jun 18, 2023 at 10:22 AM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 7.1.26
 
-Source Server         : localhost_3306
-Source Server Version : 80027
-Source Host           : localhost:3306
-Source Database       : db
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
 
-Target Server Type    : MYSQL
-Target Server Version : 80027
-File Encoding         : 65001
 
-Date: 2022-01-20 16:00:28
-*/
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-SET FOREIGN_KEY_CHECKS=0;
+--
+-- Database: `db`
+--
 
--- ----------------------------
--- Table structure for `course`
--- ----------------------------
-DROP TABLE IF EXISTS `course`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course`
+--
+
 CREATE TABLE `course` (
-  `cno` int NOT NULL AUTO_INCREMENT,
-  `cname` varchar(20) COLLATE utf8_danish_ci NOT NULL,
-  PRIMARY KEY (`cno`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `cno` int(11) NOT NULL,
+  `cname` varchar(20) COLLATE utf8_danish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of course
--- ----------------------------
-INSERT INTO `course` VALUES ('1', '软件工程');
-INSERT INTO `course` VALUES ('2', '软件测试');
+--
+-- Dumping data for table `course`
+--
 
--- ----------------------------
--- Table structure for `exam`
--- ----------------------------
-DROP TABLE IF EXISTS `exam`;
+INSERT INTO `course` (`cno`, `cname`) VALUES
+(1, '英语六级'),
+(2, '英语四级');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exam`
+--
+
 CREATE TABLE `exam` (
-  `eid` int NOT NULL AUTO_INCREMENT,
+  `eid` int(11) NOT NULL,
   `pname` varchar(20) COLLATE utf8_danish_ci NOT NULL,
-  `cno` int NOT NULL,
-  `userid` int NOT NULL,
-  `classid` int NOT NULL,
-  `singlenumber` int NOT NULL,
-  `singlecore` int NOT NULL,
-  `multiplenumber` int NOT NULL,
-  `multiplecore` int NOT NULL,
+  `cno` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `classid` int(11) NOT NULL,
+  `singlenumber` int(11) NOT NULL,
+  `singlecore` int(11) NOT NULL,
+  `multiplenumber` int(11) NOT NULL,
+  `multiplecore` int(11) NOT NULL,
   `examdate` date NOT NULL,
   `examtime` date NOT NULL,
-  `testtime` int NOT NULL,
-  PRIMARY KEY (`eid`),
-  KEY `fk_relationship_2` (`userid`),
-  KEY `fk_relationship_3` (`classid`),
-  KEY `fk_relationship_4` (`cno`),
-  CONSTRAINT `fk_relationship_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
-  CONSTRAINT `fk_relationship_3` FOREIGN KEY (`classid`) REFERENCES `pjclass` (`classid`),
-  CONSTRAINT `fk_relationship_4` FOREIGN KEY (`cno`) REFERENCES `course` (`cno`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `testtime` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of exam
--- ----------------------------
+--
+-- Dumping data for table `exam`
+--
 
--- ----------------------------
--- Table structure for `paper`
--- ----------------------------
-DROP TABLE IF EXISTS `paper`;
+INSERT INTO `exam` (`eid`, `pname`, `cno`, `userid`, `classid`, `singlenumber`, `singlecore`, `multiplenumber`, `multiplecore`, `examdate`, `examtime`, `testtime`) VALUES
+(2, '2023六月六级考试', 1, 2, 1, 1, 10, 0, 0, '2023-06-03', '2023-06-03', 15),
+(3, '2023六月四级考试', 1, 2, 1, 3, 10, 0, 0, '2023-06-03', '2023-06-03', 15);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paper`
+--
+
 CREATE TABLE `paper` (
-  `pid` int NOT NULL AUTO_INCREMENT,
-  `eid` int NOT NULL,
-  `sid` int NOT NULL,
-  `cno` int NOT NULL,
-  `stype` int NOT NULL,
+  `pid` int(11) NOT NULL,
+  `eid` int(11) NOT NULL,
+  `sid` int(11) NOT NULL,
+  `cno` int(11) NOT NULL,
+  `stype` int(11) NOT NULL,
   `scontent` varchar(255) COLLATE utf8_danish_ci NOT NULL,
   `sa` varchar(255) COLLATE utf8_danish_ci NOT NULL,
   `sb` varchar(255) COLLATE utf8_danish_ci NOT NULL,
   `sc` varchar(255) COLLATE utf8_danish_ci NOT NULL,
   `sd` varchar(255) COLLATE utf8_danish_ci NOT NULL,
-  `skey` varchar(255) COLLATE utf8_danish_ci NOT NULL,
-  PRIMARY KEY (`pid`),
-  KEY `fk_relationship_13` (`eid`),
-  KEY `fk_relationship_14` (`sid`),
-  CONSTRAINT `fk_relationship_13` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`),
-  CONSTRAINT `fk_relationship_14` FOREIGN KEY (`sid`) REFERENCES `subject` (`sid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `skey` varchar(255) COLLATE utf8_danish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of paper
--- ----------------------------
+--
+-- Dumping data for table `paper`
+--
 
--- ----------------------------
--- Table structure for `pjclass`
--- ----------------------------
-DROP TABLE IF EXISTS `pjclass`;
+INSERT INTO `paper` (`pid`, `eid`, `sid`, `cno`, `stype`, `scontent`, `sa`, `sb`, `sc`, `sd`, `skey`) VALUES
+(2, 2, 4, 0, 1, 'Give me your telephone number __ I need your help.', 'in case', 'so that', 'unless', 'test', 'A'),
+(3, 3, 4, 0, 1, 'Give me your telephone number __ I need your help.', 'in case', 'so that', 'unless', 'test', 'A'),
+(4, 3, 5, 0, 1, 'He was knocked down by a car and badly _', 'injured', 'damaged', 'hurted', 'ruined', 'C'),
+(5, 3, 1, 0, 1, 'The book contained a large__ of information', 'deal', 'amount', 'number', 'sum', 'B');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pjclass`
+--
+
 CREATE TABLE `pjclass` (
-  `classid` int NOT NULL AUTO_INCREMENT,
-  `classname` varchar(20) COLLATE utf8_danish_ci DEFAULT NULL,
-  PRIMARY KEY (`classid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `classid` int(11) NOT NULL,
+  `classname` varchar(20) COLLATE utf8_danish_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of pjclass
--- ----------------------------
-INSERT INTO `pjclass` VALUES ('1', '软件17-1');
-INSERT INTO `pjclass` VALUES ('2', '软件17-2');
-INSERT INTO `pjclass` VALUES ('3', '计网17-1');
-INSERT INTO `pjclass` VALUES ('4', '无');
+--
+-- Dumping data for table `pjclass`
+--
 
--- ----------------------------
--- Table structure for `role`
--- ----------------------------
-DROP TABLE IF EXISTS `role`;
+INSERT INTO `pjclass` (`classid`, `classname`) VALUES
+(1, 'A卷'),
+(2, 'B卷'),
+(6, '备用卷');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role`
+--
+
 CREATE TABLE `role` (
-  `roleid` int NOT NULL AUTO_INCREMENT,
-  `rolename` varchar(20) COLLATE utf8_danish_ci DEFAULT NULL,
-  PRIMARY KEY (`roleid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `roleid` int(11) NOT NULL,
+  `rolename` varchar(20) COLLATE utf8_danish_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of role
--- ----------------------------
-INSERT INTO `role` VALUES ('1', '老师');
-INSERT INTO `role` VALUES ('2', '学生');
-INSERT INTO `role` VALUES ('3', '管理员');
+--
+-- Dumping data for table `role`
+--
 
--- ----------------------------
--- Table structure for `studentexam`
--- ----------------------------
-DROP TABLE IF EXISTS `studentexam`;
+INSERT INTO `role` (`roleid`, `rolename`) VALUES
+(1, '老师'),
+(2, '学生'),
+(3, '管理员');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `studentexam`
+--
+
 CREATE TABLE `studentexam` (
-  `seid` int NOT NULL AUTO_INCREMENT,
-  `userid` int NOT NULL,
-  `classid` int NOT NULL,
-  `eid` int NOT NULL,
+  `seid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `classid` int(11) NOT NULL,
+  `eid` int(11) NOT NULL,
   `pname` varchar(20) COLLATE utf8_danish_ci NOT NULL,
-  `zscore` int NOT NULL,
-  `score` int NOT NULL,
-  `tjtime` datetime NOT NULL,
-  PRIMARY KEY (`seid`),
-  KEY `fk_relationship_6` (`userid`),
-  KEY `fk_relationship_7` (`classid`),
-  KEY `fk_relationship_8` (`eid`),
-  CONSTRAINT `fk_relationship_6` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
-  CONSTRAINT `fk_relationship_7` FOREIGN KEY (`classid`) REFERENCES `pjclass` (`classid`),
-  CONSTRAINT `fk_relationship_8` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `zscore` int(11) NOT NULL,
+  `score` int(11) NOT NULL,
+  `tjtime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of studentexam
--- ----------------------------
+--
+-- Dumping data for table `studentexam`
+--
 
--- ----------------------------
--- Table structure for `studentsubject`
--- ----------------------------
-DROP TABLE IF EXISTS `studentsubject`;
+INSERT INTO `studentexam` (`seid`, `userid`, `classid`, `eid`, `pname`, `zscore`, `score`, `tjtime`) VALUES
+(1, 3, 1, 2, '2023六月六级考试', 10, 0, '2023-06-03 00:56:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `studentsubject`
+--
+
 CREATE TABLE `studentsubject` (
-  `ssid` int NOT NULL AUTO_INCREMENT,
-  `seid` int NOT NULL,
-  `userid` int NOT NULL,
-  `eid` int NOT NULL,
-  `sid` int NOT NULL,
-  `studentkey` varchar(10) COLLATE utf8_danish_ci NOT NULL,
-  PRIMARY KEY (`ssid`),
-  KEY `fk_relationship_9` (`seid`),
-  KEY `fk_relationship_10` (`userid`),
-  KEY `fk_relationship_11` (`eid`),
-  KEY `fk_relationship_12` (`sid`),
-  CONSTRAINT `fk_relationship_10` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
-  CONSTRAINT `fk_relationship_11` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`),
-  CONSTRAINT `fk_relationship_12` FOREIGN KEY (`sid`) REFERENCES `subject` (`sid`),
-  CONSTRAINT `fk_relationship_9` FOREIGN KEY (`seid`) REFERENCES `studentexam` (`seid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `ssid` int(11) NOT NULL,
+  `seid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `eid` int(11) NOT NULL,
+  `sid` int(11) NOT NULL,
+  `studentkey` varchar(10) COLLATE utf8_danish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of studentsubject
--- ----------------------------
+--
+-- Dumping data for table `studentsubject`
+--
 
--- ----------------------------
--- Table structure for `subject`
--- ----------------------------
-DROP TABLE IF EXISTS `subject`;
+INSERT INTO `studentsubject` (`ssid`, `seid`, `userid`, `eid`, `sid`, `studentkey`) VALUES
+(1, 1, 3, 2, 4, 'D');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subject`
+--
+
 CREATE TABLE `subject` (
-  `sid` int NOT NULL AUTO_INCREMENT,
-  `cno` int NOT NULL,
-  `stype` int NOT NULL,
+  `sid` int(11) NOT NULL,
+  `cno` int(11) NOT NULL,
+  `stype` int(11) NOT NULL,
   `scontent` varchar(255) COLLATE utf8_danish_ci NOT NULL,
   `sa` varchar(255) COLLATE utf8_danish_ci NOT NULL,
   `sb` varchar(255) COLLATE utf8_danish_ci NOT NULL,
   `sc` varchar(255) COLLATE utf8_danish_ci NOT NULL,
   `sd` varchar(255) COLLATE utf8_danish_ci NOT NULL,
-  `skey` varchar(255) COLLATE utf8_danish_ci NOT NULL,
-  PRIMARY KEY (`sid`),
-  UNIQUE KEY `scontent` (`scontent`),
-  KEY `fk_relationship_5` (`cno`),
-  CONSTRAINT `fk_relationship_5` FOREIGN KEY (`cno`) REFERENCES `course` (`cno`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `skey` varchar(255) COLLATE utf8_danish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of subject
--- ----------------------------
-INSERT INTO `subject` VALUES ('1', '2', '1', '软件测试的目的是(___)', '试验性运行软件', '发现软件错误', '证明软件正确', '找出软件中全部错误', 'B');
-INSERT INTO `subject` VALUES ('2', '2', '1', '在一个长度为n的顺序表的表尾插入一个新元素的渐进时间复杂度为', 'O (n)', 'O (1)', 'O (n2 )', 'O (log2 n)', 'A');
-INSERT INTO `subject` VALUES ('3', '1', '1', '计算机系统中的存贮器系统是指', 'RAM存贮器', 'ROM存贮器', '主存贮器', 'cache、主存贮器和外存贮器', 'D');
-INSERT INTO `subject` VALUES ('4', '1', '1', '某机字长32位，其中1位符号位，31位表示尾数。若用定点小数表示，则最大正小数为', '+（1 – 2-32）', '+（1 – 2-31）', '2-32', '2-31', 'B');
-INSERT INTO `subject` VALUES ('5', '1', '1', '算术 / 逻辑运算单元74181ALU可完成', '16种算术运算功能', '16种逻辑运算功能', '16种算术运算功能和16种逻辑运算功能', '4位乘法运算和除法运算功能', 'C');
-INSERT INTO `subject` VALUES ('6', '1', '1', '存储单元是指', '存放一个二进制信息位的存贮元', '存放一个机器字的所有存贮元集合', '存放一个字节的所有存贮元集合', '存放两个字节的所有存贮元集合；', 'B');
+--
+-- Dumping data for table `subject`
+--
 
--- ----------------------------
--- Table structure for `type`
--- ----------------------------
-DROP TABLE IF EXISTS `type`;
+INSERT INTO `subject` (`sid`, `cno`, `stype`, `scontent`, `sa`, `sb`, `sc`, `sd`, `skey`) VALUES
+(1, 1, 1, 'The book contained a large__ of information', 'deal', 'amount', 'number', 'sum', 'B'),
+(4, 1, 1, 'Give me your telephone number __ I need your help.', 'in case', 'so that', 'unless', 'test', 'A'),
+(5, 1, 1, 'He was knocked down by a car and badly _', 'injured', 'damaged', 'hurted', 'ruined', 'C');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `type`
+--
+
 CREATE TABLE `type` (
-  `stype` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) COLLATE utf8_danish_ci NOT NULL,
-  PRIMARY KEY (`stype`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `stype` int(11) NOT NULL,
+  `name` varchar(30) COLLATE utf8_danish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of type
--- ----------------------------
-INSERT INTO `type` VALUES ('1', '一，单选题');
-INSERT INTO `type` VALUES ('2', '二，多选题');
+--
+-- Dumping data for table `type`
+--
 
--- ----------------------------
--- Table structure for `users`
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
+INSERT INTO `type` (`stype`, `name`) VALUES
+(1, '一，单选题'),
+(2, '二，多选题');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
 CREATE TABLE `users` (
-  `userid` int NOT NULL AUTO_INCREMENT,
-  `roleid` int DEFAULT NULL,
+  `userid` int(11) NOT NULL,
+  `roleid` int(11) DEFAULT NULL,
   `username` varchar(20) COLLATE utf8_danish_ci DEFAULT NULL,
   `userpwd` varchar(20) COLLATE utf8_danish_ci DEFAULT NULL,
   `truename` varchar(30) COLLATE utf8_danish_ci DEFAULT NULL,
-  `classid` int DEFAULT NULL,
-  PRIMARY KEY (`userid`),
-  UNIQUE KEY `username` (`username`),
-  KEY `fk_relationship_1` (`roleid`),
-  CONSTRAINT `fk_relationship_1` FOREIGN KEY (`roleid`) REFERENCES `role` (`roleid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_danish_ci;
+  `classid` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
--- ----------------------------
--- Records of users
--- ----------------------------
-INSERT INTO `users` VALUES ('1', '3', 'admin', '12345', '管理员', '1');
-INSERT INTO `users` VALUES ('2', '1', 'rj0001', '12345', '王林', '1');
-INSERT INTO `users` VALUES ('3', '2', '17510001', '11111', '张三丰', '1');
-INSERT INTO `users` VALUES ('4', '2', '17510002', '12345', '李四', '2');
-INSERT INTO `users` VALUES ('5', '2', '17510003', '12345', '王五', '1');
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`userid`, `roleid`, `username`, `userpwd`, `truename`, `classid`) VALUES
+(1, 3, 'admin', '12345', '管理员', 1),
+(2, 1, 'teacher1', '12345', '老师1', 1),
+(3, 2, 'student1', '12345', '学生1', 1),
+(5, 2, 'student2', '12345', '学生2', 2);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `course`
+--
+ALTER TABLE `course`
+  ADD PRIMARY KEY (`cno`);
+
+--
+-- Indexes for table `exam`
+--
+ALTER TABLE `exam`
+  ADD PRIMARY KEY (`eid`),
+  ADD KEY `fk_relationship_2` (`userid`),
+  ADD KEY `fk_relationship_3` (`classid`),
+  ADD KEY `fk_relationship_4` (`cno`);
+
+--
+-- Indexes for table `paper`
+--
+ALTER TABLE `paper`
+  ADD PRIMARY KEY (`pid`),
+  ADD KEY `fk_relationship_13` (`eid`),
+  ADD KEY `fk_relationship_14` (`sid`);
+
+--
+-- Indexes for table `pjclass`
+--
+ALTER TABLE `pjclass`
+  ADD PRIMARY KEY (`classid`);
+
+--
+-- Indexes for table `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`roleid`);
+
+--
+-- Indexes for table `studentexam`
+--
+ALTER TABLE `studentexam`
+  ADD PRIMARY KEY (`seid`),
+  ADD KEY `fk_relationship_6` (`userid`),
+  ADD KEY `fk_relationship_7` (`classid`),
+  ADD KEY `fk_relationship_8` (`eid`);
+
+--
+-- Indexes for table `studentsubject`
+--
+ALTER TABLE `studentsubject`
+  ADD PRIMARY KEY (`ssid`),
+  ADD KEY `fk_relationship_9` (`seid`),
+  ADD KEY `fk_relationship_10` (`userid`),
+  ADD KEY `fk_relationship_11` (`eid`),
+  ADD KEY `fk_relationship_12` (`sid`);
+
+--
+-- Indexes for table `subject`
+--
+ALTER TABLE `subject`
+  ADD PRIMARY KEY (`sid`),
+  ADD UNIQUE KEY `scontent` (`scontent`),
+  ADD KEY `fk_relationship_5` (`cno`);
+
+--
+-- Indexes for table `type`
+--
+ALTER TABLE `type`
+  ADD PRIMARY KEY (`stype`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`userid`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD KEY `fk_relationship_1` (`roleid`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `course`
+--
+ALTER TABLE `course`
+  MODIFY `cno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `exam`
+--
+ALTER TABLE `exam`
+  MODIFY `eid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `paper`
+--
+ALTER TABLE `paper`
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `pjclass`
+--
+ALTER TABLE `pjclass`
+  MODIFY `classid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `role`
+--
+ALTER TABLE `role`
+  MODIFY `roleid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `studentexam`
+--
+ALTER TABLE `studentexam`
+  MODIFY `seid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `studentsubject`
+--
+ALTER TABLE `studentsubject`
+  MODIFY `ssid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `subject`
+--
+ALTER TABLE `subject`
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `type`
+--
+ALTER TABLE `type`
+  MODIFY `stype` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `exam`
+--
+ALTER TABLE `exam`
+  ADD CONSTRAINT `fk_relationship_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
+  ADD CONSTRAINT `fk_relationship_3` FOREIGN KEY (`classid`) REFERENCES `pjclass` (`classid`),
+  ADD CONSTRAINT `fk_relationship_4` FOREIGN KEY (`cno`) REFERENCES `course` (`cno`);
+
+--
+-- Constraints for table `paper`
+--
+ALTER TABLE `paper`
+  ADD CONSTRAINT `fk_relationship_13` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`),
+  ADD CONSTRAINT `fk_relationship_14` FOREIGN KEY (`sid`) REFERENCES `subject` (`sid`);
+
+--
+-- Constraints for table `studentexam`
+--
+ALTER TABLE `studentexam`
+  ADD CONSTRAINT `fk_relationship_6` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
+  ADD CONSTRAINT `fk_relationship_7` FOREIGN KEY (`classid`) REFERENCES `pjclass` (`classid`),
+  ADD CONSTRAINT `fk_relationship_8` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`);
+
+--
+-- Constraints for table `studentsubject`
+--
+ALTER TABLE `studentsubject`
+  ADD CONSTRAINT `fk_relationship_10` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
+  ADD CONSTRAINT `fk_relationship_11` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`),
+  ADD CONSTRAINT `fk_relationship_12` FOREIGN KEY (`sid`) REFERENCES `subject` (`sid`),
+  ADD CONSTRAINT `fk_relationship_9` FOREIGN KEY (`seid`) REFERENCES `studentexam` (`seid`);
+
+--
+-- Constraints for table `subject`
+--
+ALTER TABLE `subject`
+  ADD CONSTRAINT `fk_relationship_5` FOREIGN KEY (`cno`) REFERENCES `course` (`cno`);
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `fk_relationship_1` FOREIGN KEY (`roleid`) REFERENCES `role` (`roleid`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
