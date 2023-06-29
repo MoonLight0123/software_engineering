@@ -15,6 +15,10 @@ public class Exam {
     private int singlecore;
     private int multiplenumber;
     private int multiplecore;
+
+    private int compositionnumber;
+
+    private int compositioncore;
     private Date examdate;
     private Date examtime;
     private int testtime;
@@ -173,5 +177,21 @@ public class Exam {
     @Override
     public int hashCode() {
         return Objects.hash(eid, pname, cno, userid, classid, singlenumber, singlecore, multiplenumber, multiplecore, examdate, examtime, testtime);
+    }
+
+    public int getCompositionnumber() {
+        return compositionnumber;
+    }
+
+    public void setCompositionnumber(int compositionnumber) {
+        this.compositionnumber = compositionnumber;
+    }
+
+    public int getCompositioncore() {
+        return compositioncore;
+    }
+
+    public void setCompositioncore(int compositioncore) {
+        this.compositioncore = compositioncore;
     }
 }

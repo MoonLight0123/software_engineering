@@ -2,17 +2,20 @@ package cn.com.scitc.graduationproject.controller;
 
 import cn.com.scitc.graduationproject.dao.*;
 import cn.com.scitc.graduationproject.model.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/")
@@ -34,7 +37,7 @@ public class ExamController  {
     @RequestMapping("/examList")
     private  String examList(Model model, HttpServletRequest request){
         HttpSession session = request.getSession(true);
-        Integer classid= (Integer) session.getAttribute("classid");
+        Integer classid = (Integer) session.getAttribute("classid");
         List<Exam> exams = examDao.finbyclassid(classid);
         for (Exam exam:exams){
             Course byCno = courseDao.findByCno(exam.getCno());
@@ -44,6 +47,32 @@ public class ExamController  {
         model.addAttribute("exams",exams);
         return "/student/examList";
     }
+
+    @GetMapping("/getPayStatus")
+    @ResponseBody
+    private Studentexam getPayStatus(Integer eId,HttpServletRequest request){
+        Integer userId = (Integer) request.getSession().getAttribute("userid");
+        return studentexamDao.findByOne(userId,eId);
+    }
+
+    @PostMapping("/saveStudentExam")
+    @ResponseBody
+    private Integer saveStudentExam(Integer eId, HttpServletRequest request){
+        HttpSession session = request.getSession(true);
+        Integer classid = (Integer) session.getAttribute("classid");
+        Integer userId = (Integer) session.getAttribute("userid");
+        Studentexam studentexam = studentexamDao.findByOne(userId,eId);
+        if (studentexam == null){
+            Exam exam = examDao.findByEid(eId);
+            if (exam == null){
+                return 0;
+            }
+            return studentexamDao.saveStudentExam(userId, eId, exam.getPname(), classid, new Timestamp(System.currentTimeMillis()));
+        }else {
+            return 1;
+        }
+    }
+
     @ResponseBody
     @RequestMapping("/findExamByEid")
     private Exam findExamByEid(@RequestBody Exam exams){
@@ -58,9 +87,11 @@ public class ExamController  {
     @RequestMapping("/paper")
     private String paper(Integer eid,Model model,HttpServletRequest request ){
         List<Paper> Single = paperDao.finbytype(eid, 1);
+        List<Paper> composition = paperDao.finbytype(eid,3);
         Integer cont = Single.size();
         request.getSession().setAttribute("single",Single);
        model.addAttribute("single",Single);
+       model.addAttribute("composition",composition);
         model.addAttribute("cont",cont);
         List<Paper> Multiple = paperDao.finbytype(eid, 2);
         Integer cont1 =Multiple.size();
@@ -73,7 +104,7 @@ public class ExamController  {
     }
     //试卷成绩
     @RequestMapping("/PaperScore")
-    private String PaperScore(HttpServletRequest request,Model model){
+    private String PaperScore(HttpServletRequest request, Model model){
         HttpSession session = request.getSession(true);
         Integer classid =(Integer)session.getAttribute("classid") ;
         Integer userid =(Integer)session.getAttribute("userid");
@@ -103,26 +134,10 @@ public class ExamController  {
                 System.out.println("提交失败！");
             }
         }
-        Integer zscore =slist.size()*singlescore;
-        String pname = request.getParameter("pname");
-        String tjtime = request.getParameter("tjtime");
+        Integer zscore = slist.size()*singlescore;
         model.addAttribute("score",score);
-        Studentexam studentexam = new Studentexam();
-        studentexam.setEid(eid);
-        studentexam.setPname(pname);
-        studentexam.setUserid(userid);
-        studentexam.setClassid(classid);
-        studentexam.setZscore(zscore);
-        studentexam.setScore(score);
-        Timestamp ts = new Timestamp(System.currentTimeMillis());
-        try {
-            ts = Timestamp.valueOf(tjtime);
-            System.out.println(ts);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        studentexam.setTjtime(ts);
-        studentexamDao.save(studentexam);
+        studentexamDao.updateScore(zscore,score, userid, eid);
+        Studentexam studentexam = studentexamDao.findByOne(userid,eid);
         //答卷表
        Integer seid= studentexam.getSeid();
         for (int i = 0; i < slist.size(); ++i) {
@@ -143,6 +158,21 @@ public class ExamController  {
                     studentsubjectDao.save(studentsubject);
                 }
             }
+        }
+        Map<String,String[]> mapString = request.getParameterMap();
+        System.out.println(JSON.toJSONString(mapString));
+        String[] cpid =  mapString.get("cpid");
+        String[] skey =  mapString.get("skey");
+        for (int i =0; i<cpid.length; i++) {
+            Studentsubject studentsubject = new Studentsubject();
+            studentsubject.setSeid(seid);
+            studentsubject.setUserid(userid);
+            studentsubject.setEid(eid);
+            studentsubject.setSid(Integer.parseInt(cpid[i]));
+            studentsubject.setStudentkey(skey[i]);
+            studentsubject.setScore(0);
+            studentsubject.setStatus("0");
+            studentsubjectDao.save(studentsubject);
         }
         return "student/paperScore";
     }
@@ -169,23 +199,32 @@ public class ExamController  {
     private String stuPaper(Integer seid,HttpServletRequest request,Model model){
         HttpSession session = request.getSession(true);
         Integer userid= (Integer) session.getAttribute("userid");
+        List<Studentsubject> select = new ArrayList<>();
+        List<Studentsubject> composition = new ArrayList<>();
         List<Studentsubject> stukeys = studentsubjectDao.findBySeid(userid, seid);
         for (Studentsubject studentsubject :stukeys){
             Subject bySid = subjectDao.findBySid(studentsubject.getSid());
             Exam byEid = examDao.findByEid(studentsubject.getEid());
             model.addAttribute("exam",byEid);
             studentsubject.setSubject(bySid);
+            if (studentsubject.getStatus() == null || studentsubject.getStatus().isEmpty()){
+                select.add(studentsubject);
+            }else {
+                composition.add(studentsubject);
+            }
         }
-        model.addAttribute("stukeys",stukeys);
+        model.addAttribute("stukeys",select);
+        model.addAttribute("composition",composition);
         return "student/stuPaper";
     }
     //查询考试是否结束
     @ResponseBody
     @RequestMapping("/findBySeid")
-    private Studentexam findBySeid(@RequestBody Studentexam exams){
+    private Exam findBySeid(@RequestBody Studentexam exams){
         Studentexam stexam = studentexamDao.findByseid(exams.getSeid());
         if (stexam!= null) {
-            return stexam;
+            Exam exam = examDao.findByEid(stexam.getEid());
+            return exam;
         } else {
             return null;
         }

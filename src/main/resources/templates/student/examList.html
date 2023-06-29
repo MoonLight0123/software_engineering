@@ -24,7 +24,7 @@
                                   <p>题目数量: <span th:text="${exams.singlenumber}"></span> &emsp;&emsp; 总分: <span th:text="${exams.singlenumber}*${exams.singlecore}"></span> &emsp;&emsp;</p>
                                   <p class="beginTime">考试时长: <span th:text="${exams.testtime}"></span> 分钟</p>
                                   <p>
-                                      <a class="btn btn-default btn-lg btn-block beginExam" th:onclick="'javascript:StratTest(\''+${exams.eid}+'\');'">进入考试</a>
+                                      <a class="btn btn-default btn-lg btn-block beginExam" th:onclick="'javascript:startTest(\''+${exams.eid}+'\')'">报名考试</a>
                                   </p>
                               </div>
                           </div>
@@ -42,81 +42,111 @@
     </div>
 </div>
 <script>
-    function StratTest(eid) {
-       if (!eid) {
+    function startTest(eid) {
+        console.log(eid)
+        if (!eid) {
             alert("error");
         } else {
-           var datalist="";
-           $.ajax({
-               url: '/findOneStuExam',
-               type: 'POST',
-               dataType: 'json',
-               async:false,
-               contentType: 'application/json;charset=UTF-8',
-               data: JSON.stringify({
-                   eid: eid
-               }),
-               success: function (data) {
-                   datalist=data;
-               },
-           });
-           if(datalist==""){
-               // 先去查询数据
-               var examdate="";
-               var examtime="";
-               $.ajax({
-                   url: '/findExamByEid',
-                   type: 'POST',
-                   dataType: 'json',
-                   async:false,
-                   contentType: 'application/json;charset=UTF-8',
-                   data: JSON.stringify({
-                       eid: eid
-                   }),
-                   success: function (data) {
-                       examdate =data.examdate;
-                       examtime = data.examtime;
-                   },
-                   error: function () {
-                       alert("错误");
-                   }
-               });
-               //获取当前日期
-               var date = new Date();
-               var seperator1 = "-";
-               var year = date.getFullYear();
-               var month = date.getMonth() + 1;
-               var strDate = date.getDate();
-               if (month >= 1 && month <= 9) {
-                   month = "0" + month;
-               }
-               if (strDate >= 0 && strDate <= 9) {
-                   strDate = "0" + strDate;
-               }
-               var currentdate = year + seperator1 + month + seperator1 + strDate;
+            // 先去查询数据
+            var examdate="";
+            var examtime="";
+            $.ajax({
+                url: '/findExamByEid',
+                type: 'POST',
+                dataType: 'json',
+                async:false,
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({
+                    eid: eid
+                }),
+                success: function (data) {
+                    examdate =data.examdate;
+                    examtime = data.examtime;
+                },
+                error: function () {
+                    alert("错误");
+                }
+            });
+            //获取当前日期
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
 
-               console.log(currentdate);
-
-               if (currentdate >= examdate) {
-                   if (currentdate <= examtime) {
-                       if(confirm('将开始考试，是否继续?')){
-                           window.location.href="paper?eid="+eid;
-                       }
-                   } else {
-                       alert("考试日期已经截止！")
-                   }
-               } else {
-                   alert("考试日期未开始！")
-               }
-           }else {
-               alert("你已经参加过本次考试！")
-           }
-
-           }
+            if (currentdate >= examdate) {
+                if (currentdate <= examtime) {
+                    var datalist="";
+                    $.ajax({
+                        url: '/findOneStuExam',
+                        type: 'POST',
+                        dataType: 'json',
+                        async:false,
+                        contentType: 'application/json;charset=UTF-8',
+                        data: JSON.stringify({
+                            eid: eid
+                        }),
+                        success: function (data) {
+                            datalist=data;
+                        },
+                    });
+                    if(datalist==""){
+                        //未缴费
+                        layer.open({
+                            type: 1 //Page层类型
+                            ,area: ['auto','300px']
+                            ,title: '报名考试'
+                            ,shade: 0.6
+                            ,closeBtn: 0
+                            ,maxmin: false
+                            ,anim: 1
+                            ,content: " <div style=\"padding: 0px  20px  0px  20px ;\">\n" +
+                                "                <img src=\"/img/exam.png\" width=\"200px\" height=\"200px\" />\n" +
+                                "       </div>",
+                            btn:['确定缴费','取消'],
+                            //确定按钮
+                            btn1: function(index, layero){
+                                layer.close(index)
+                                $.ajax({
+                                    url: '/saveStudentExam',
+                                    type: 'post',
+                                    data: {
+                                        eId: eid,
+                                    },
+                                    success: function (data){
+                                        if (data > 0){
+                                            if(confirm('将开始考试，是否继续?')){
+                                                window.location.href="paper?eid="+eid;
+                                            }
+                                        }
+                                    }
+                                })
+                            },
+                        });
+                    }else {
+                        if (datalist.status === '1'){
+                            alert("你已经参加过本次考试！")
+                        }else {
+                            if(confirm('你已报名此次开始，即将开始考试，是否继续?')){
+                                window.location.href="paper?eid="+eid;
+                            }
+                        }
+                    }
+                } else {
+                    alert("考试日期已经截止！")
+                }
+            } else {
+                alert("考试日期未开始！")
+            }
+       }
     }
-
-
-
 </script>
 </body>
 </html>

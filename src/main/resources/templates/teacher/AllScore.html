@@ -18,7 +18,8 @@
             <th>姓名</th>
             <th>试卷名称</th>
             <th>试卷总分</th>
-            <th>个人成绩</th>
+            <th>选择题得分</th>
+            <th>作文得分</th>
             <th>考试时间</th>
         </tr>
         </thead>
@@ -29,6 +30,7 @@
             <td th:text="${score.pname}"></td>
             <td th:text="${score.zscore}"></td>
             <td th:text="${score.score}"></td>
+            <td th:text="${score.cpscore}"></td>
             <td th:text="${score.tjtime}"></td>
         </tr>
         </tbody>

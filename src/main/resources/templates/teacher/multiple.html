@@ -46,11 +46,6 @@
             <th>编号</th>
             <th>所属科目</th>
             <th>题干</th>
-            <th>A</th>
-            <th>B</th>
-            <th>C</th>
-            <th>D</th>
-            <th>答案</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -58,13 +53,8 @@
         <tr th:each="sublist: ${pageInfo.getContent()}">
             <td><input type="checkbox" name="items" th:id="${sublist.sid}"/></td>
             <td th:text="${sublist.sid}"></td>
-            <td th:text="${sublist.cno}"></td>
+            <td th:text="${sublist.course.cname}"></td>
             <td th:text="${sublist.scontent}"></td>
-            <td th:text="${sublist.sa}"></td>
-            <td th:text="${sublist.sb}"></td>
-            <td th:text="${sublist.sc}"></td>
-            <td th:text="${sublist.sd}"></td>
-            <td th:text="${sublist.skey}"></td>
             <td>
                 <a th:onclick="'javascript:edit(\''+${sublist.sid}+'\');'" style="text-decoration: none;">
                     <button class="btn btn-default" style="width: 50px;height: 30px;background: #3e8f3e">修改</button>
@@ -107,32 +97,10 @@
             </div>
             <form class="form-horizontal" th:action="@{/addMultiple}" method="post">
                 <div class="modal-body">
-                    <input name="stype" value="1" hidden="hidden"/>
+                    <input name="stype" value="3" hidden="hidden"/>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">题目：</span>
-                        <textarea class="form-control" rows="3" name="scontent" id="scontent"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">A:</span>
-                        <textarea class="form-control" rows="3" name="sa" id="sa"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">B:</span>
-                        <textarea class="form-control" rows="3" name="sb" id="sb"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">C:</span>
-                        <textarea class="form-control" rows="3" name="sc" id="sc"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">D:</span>
-                        <textarea class="form-control" rows="3" name="sd" id="sd"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">答案：</span>
-                        <div class="col-sm-5">
-                            <input class="form-control" name="skey" id="skey"/>
-                        </div>
+                        <textarea class="form-control" rows="10" style="width: 95%" name="scontent" id="scontent"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">所属课程</label>
@@ -167,29 +135,7 @@
                     <input name="stype" id="stype1" hidden="hidden"/>
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">题目：</span>
-                        <textarea class="form-control" rows="3" name="scontent" id="scontent1"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">A:</span>
-                        <textarea class="form-control" rows="3" name="sa" id="sa1"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">B:</span>
-                        <textarea class="form-control" rows="3" name="sb" id="sb1"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">C:</span>
-                        <textarea class="form-control" rows="3" name="sc" id="sc1"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">D:</span>
-                        <textarea class="form-control" rows="3" name="sd" id="sd1"></textarea>
-                    </div>
-                    <div class="form-group input-group">
-                        <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">答案：</span>
-                        <div class="col-sm-5">
-                           <input name="skey" id="skey1" class="form-control"/>
-                        </div>
+                        <textarea class="form-control" rows="10" style="width: 95%" name="scontent" id="scontent1"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">所属课程</label>
@@ -286,11 +232,6 @@
                     $("#sid1").val(data.sid);
                     $("#stype1").val(data.stype)
                     $("#scontent1").val(data.scontent);
-                    $("#sa1").val(data.sa);
-                    $("#sb1").val(data.sb);
-                    $("#sc1").val(data.sc);
-                    $("#sd1").val(data.sd);
-                    $("#skey1").val(data.skey);
                     $("#cno1").val(data.cno);
                     $("#editch").modal('show');
                 },

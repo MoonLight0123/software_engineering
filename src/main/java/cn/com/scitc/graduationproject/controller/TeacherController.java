@@ -12,19 +12,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 @Controller
@@ -218,7 +212,9 @@ public class TeacherController {
 
     //添加考试
     @RequestMapping("/insertexam")
-    private String insertexam(String pname,Integer userid, Integer cno,  Integer classid, Integer singlenumber, Integer singlecore, Integer multiplenumber, Integer multiplecore, Date examdate,Date examtime,Integer testtime,Model model){
+    private String insertexam(String pname,Integer userid, Integer cno,  Integer classid, Integer singlenumber,
+                              Integer singlecore, Integer multiplenumber, Integer multiplecore, Integer compositionnumber,
+                              Integer compositioncore, Date examdate,Date examtime,Integer testtime,Model model){
         Exam exam = new Exam();
         exam.setPname(pname);
         exam.setCno(cno);
@@ -228,6 +224,8 @@ public class TeacherController {
         exam.setSinglecore(singlecore);
         exam.setMultiplenumber(multiplenumber);
         exam.setMultiplecore(multiplecore);
+        exam.setCompositionnumber(compositionnumber);
+        exam.setCompositioncore(compositioncore);
         exam.setExamdate(examdate);
         exam.setExamtime(examtime);
         exam.setTesttime(testtime);
@@ -281,6 +279,31 @@ public class TeacherController {
                     p.setSc(q1.getSc());
                     p.setSd(q1.getSd());
                     p.setSkey(q1.getSkey());
+                    paperDao.save(p);
+                }
+            }
+        }
+
+        List<Subject> compositionlsit = subjectDao.finbytype(3, cno);
+        List<Subject> resultList3 = new ArrayList<Subject>();
+        if(compositionnumber>0){
+            for(int i=1;i<=compositionnumber;i++){
+                int n1=random.nextInt(compositionlsit .size());
+                Subject q2=compositionlsit .get(n1);
+                if(resultList3 .contains(q2)){
+                    i--;
+                }else{
+                    resultList3.add(compositionlsit.get(n1));
+                    Paper p = new Paper();
+                    p.setEid(eid);
+                    p.setSid(q2.getSid());
+                    p.setStype(q2.getStype());
+                    p.setScontent(q2.getScontent());
+                    p.setSa(q2.getSa());
+                    p.setSb(q2.getSb());
+                    p.setSc(q2.getSc());
+                    p.setSd(q2.getSd());
+                    p.setSkey(q2.getSkey());
                     paperDao.save(p);
                 }
             }
@@ -373,24 +396,22 @@ public class TeacherController {
         }
         Sort sort = new Sort(Sort.Direction.ASC, "sid");  // 这里的"recordNo"是实体类的主键，记住一定要是实体类的属性，而不能是数据库的字段
         Pageable pageable = new PageRequest(pageNum - 1, 5, sort); // （当前页， 每页记录数， 排序方式）
-        Page<Subject> lis = subjectDao.findByStype(2,pageable);
-        logger.info("pageNum==" + pageNum);
+        Page<Subject> lis = subjectDao.findByStype(3, pageable);
+        for (Subject subject : lis){
+            Course byCno = courseDao.findByCno(subject.getCno());
+            subject.setCourse(byCno);
+        }
         model.addAttribute("pageInfo", lis);
         response.addHeader("x-frame-options","SAMEORIGIN");
         return "/teacher/multiple";
     }
     //添加多选
     @RequestMapping("/addMultiple")
-    private String addMultiple(Integer stype,String scontent,String sa,String sb,String sc,String sd,String skey,Integer cno){
+    private String addMultiple(Integer stype,String scontent, Integer cno){
         Subject sub = new Subject();
         sub.setCno(cno);
         sub.setStype(stype);
         sub.setScontent(scontent);
-        sub.setSa(sa);
-        sub.setSb(sb);
-        sub.setSc(sc);
-        sub.setSd(sd);
-        sub.setSkey(skey);
         subjectDao.save(sub);
         return "redirect:/findMultiple";
     }
@@ -439,5 +460,33 @@ public class TeacherController {
         }
         model.addAttribute("score",byClassid);
         return "teacher/AllScore";
+    }
+
+    // 批阅作文
+    @RequestMapping("/findComposition")
+    private String findComposition(){
+        return "teacher/composition";
+    }
+
+    // 返回一份学生作文
+    @GetMapping("/getComposition")
+    @ResponseBody
+    private Map<String, Object> getComposition(String examineStatus){
+        Map<String, Object> map = studentsubjectDao.selectComposition(examineStatus);
+        if (map.isEmpty()){
+            return null;
+        }
+        return map;
+    }
+
+    // 提交作文得分
+    @ResponseBody
+    @PostMapping("/saveCompositionScore")
+    public Integer saveCompositionScore(Integer ssid,Integer seid, String score){
+        Integer count = studentsubjectDao.saveCompositionScore(score, ssid);
+        if (count>0){
+            count = studentexamDao.updateZscore(score, score, seid);
+        }
+        return count;
     }
 }

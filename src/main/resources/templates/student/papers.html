@@ -159,27 +159,33 @@
                     </h4>
                 </div>
                 <form th:action="@{/PaperScore}" method="post" role="myForm">
-                <input type="hidden" name="eid" th:value="${exam.eid}">
-                <input type="hidden" name="pname" th:value="${exam.pname}">
-                    <input type="hidden" name="userid" th:value="${session.lis.getUserid()}">
-                    <input type="hidden" id="tjtime" name="tjtime" value=""/>
-                <div id="Radio" class="panel-collapse collapse in">
-                    <div class="panel-body">
+                    <input type="hidden" name="eid" th:value="${exam.eid}">
+                    <input type="hidden" name="pname" th:value="${exam.pname}">
+                        <input type="hidden" name="userid" th:value="${session.lis.getUserid()}">
+                        <input type="hidden" id="tjtime" name="tjtime" value=""/>
+                    <div id="Radio" class="panel-collapse collapse in">
+                        <div class="panel-body">
                             <ol type="1">
                                 <div class="subject" th:each="single:${session.single}">
-                                   <li th:text="${single.scontent}"></li>
-                                     <ol style="list-style:none;">
+                                    <li th:text="${single.scontent}"></li>
+                                    <ol style="list-style:none;">
                                         <input type="hidden" name="sid" th:value="${single.sid}">
-                                         <li><label><input type="radio" value="A" class="rad" th:name="${single.sid}" th:text="'A:'+${single.sa}"></label></li>
-                                         <li><label><input type="radio" value="B" class="rad" th:name="${single.sid}" th:text="'B:'+${single.sb}"></label></li>
-                                         <li><label><input type="radio" value="C" class="rad" th:name="${single.sid}" th:text="'C:'+${single.sc}"></label></li>
-                                         <li><label><input type="radio" value="D" class="rad" th:name="${single.sid}" th:text="'D:'+${single.sd}"></label></li>
-                                     </ol>
+                                        <li><label><input type="radio" value="A" class="rad" th:name="${single.sid}" th:text="'A:'+${single.sa}"></label></li>
+                                        <li><label><input type="radio" value="B" class="rad" th:name="${single.sid}" th:text="'B:'+${single.sb}"></label></li>
+                                        <li><label><input type="radio" value="C" class="rad" th:name="${single.sid}" th:text="'C:'+${single.sc}"></label></li>
+                                        <li><label><input type="radio" value="D" class="rad" th:name="${single.sid}" th:text="'D:'+${single.sd}"></label></li>
+                                    </ol>
+                                </div>
+                                <!-- 作文题显示部分 -->
+                                <div class="subject" th:each="cp:${composition}">
+                                    <li th:text="${cp.scontent}"></li>
+                                    <input type="hidden" name="cpid" th:value="${cp.sid}" >
+                                    <textarea class="form-control" rows="10" style="width: 70%" name="skey"></textarea>
                                 </div>
                             </ol>
-                        <button class="btn btn-success" type="submit" onclick="getValue()">交卷</button>
+                            <button class="btn btn-success" type="submit" onclick="getValue()">交卷</button>
+                        </div>
                     </div>
-                </div>
                 </form>
             </div>
         </div>
@@ -197,6 +203,7 @@
                 studentkeys.push(radio[i].value);
             }
         }
+
         if( studentkeys.length < cont){
             confirm("还有未选择的题目,是否提交？")
         }

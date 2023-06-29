@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>
 </head>
 <body>
 <div th:fragment="TeacherNav">
@@ -161,11 +164,15 @@
                 <ul class="nav nav-sidebar">
                     <li><a class="a-hd"><span class="glyphicon glyphicon-briefcase"></span>&nbsp; &nbsp;&nbsp;题库管理</a></li>
                     <li><a th:href="@{/finddanxuan}"><span class="glyphicon glyphicon-play"></span>&nbsp; &nbsp;&nbsp;选择题</a></li>
-                    <li><a th:href="@{/findMultiple} "><span class="glyphicon glyphicon-play"></span>  作文题</a></li>
+                    <li><a th:href="@{/findMultiple} "><span class="glyphicon glyphicon-play"></span>&nbsp; &nbsp;&nbsp;作文题</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
                     <li><a class="a-hd"><span class="glyphicon glyphicon-briefcase"></span>&nbsp; &nbsp;&nbsp;成绩管理</a></li>
                     <li><a th:href="@{/findAllScore}"><span class="glyphicon glyphicon-play"></span>&nbsp; &nbsp;&nbsp;成绩查询</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a class="a-hd"><span class="glyphicon glyphicon-briefcase"></span>&nbsp; &nbsp;&nbsp;阅卷管理</a></li>
+                    <li><a th:href="@{/findComposition}"><span class="glyphicon glyphicon-play"></span>&nbsp; &nbsp;&nbsp;批阅作文</a></li>
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">

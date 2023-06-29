@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost_3306
+ Source Server         : MyDB
  Source Server Type    : MySQL
- Source Server Version : 50733
+ Source Server Version : 50717
  Source Host           : localhost:3306
- Source Schema         : db1
+ Source Schema         : db
 
  Target Server Type    : MySQL
- Target Server Version : 50733
+ Target Server Version : 50717
  File Encoding         : 65001
 
- Date: 28/06/2023 16:11:30
+ Date: 29/06/2023 14:28:34
 */
 
 SET NAMES utf8mb4;
@@ -25,7 +25,7 @@ CREATE TABLE `course`  (
   `cno` int(11) NOT NULL AUTO_INCREMENT,
   `cname` varchar(20) CHARACTER SET utf8 COLLATE utf8_danish_ci NOT NULL,
   PRIMARY KEY (`cno`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of course
@@ -59,13 +59,17 @@ CREATE TABLE `exam`  (
   CONSTRAINT `fk_relationship_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_relationship_3` FOREIGN KEY (`classid`) REFERENCES `pjclass` (`classid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_relationship_4` FOREIGN KEY (`cno`) REFERENCES `course` (`cno`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of exam
 -- ----------------------------
 INSERT INTO `exam` VALUES (2, '2023六月六级考试', 1, 2, 1, 1, 10, 0, 0, 0, 0, '2023-06-03', '2023-06-03', 15);
 INSERT INTO `exam` VALUES (3, '2023六月四级考试', 1, 2, 1, 3, 10, 0, 0, 0, 0, '2023-06-03', '2023-06-03', 15);
+INSERT INTO `exam` VALUES (7, '考试test', 1, 2, 1, 1, 10, 0, 0, 1, 10, '2019-11-15', '2023-06-29', 10);
+INSERT INTO `exam` VALUES (8, '10101', 1, 2, 1, 2, 10, 0, 0, 0, 0, '2019-11-15', '2023-06-28', 1);
+INSERT INTO `exam` VALUES (9, 'ceshi', 1, 2, 1, 2, 10, 0, 0, 1, 10, '2019-11-15', '2022-06-29', 10);
+INSERT INTO `exam` VALUES (10, 'kaoshitest', 1, 2, 1, 1, 10, 0, 0, 1, 10, '2019-11-15', '2023-06-28', 10);
 
 -- ----------------------------
 -- Table structure for paper
@@ -88,7 +92,7 @@ CREATE TABLE `paper`  (
   INDEX `fk_relationship_14`(`sid`) USING BTREE,
   CONSTRAINT `fk_relationship_13` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_relationship_14` FOREIGN KEY (`sid`) REFERENCES `subject` (`sid`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of paper
@@ -97,6 +101,16 @@ INSERT INTO `paper` VALUES (2, 2, 4, 0, 1, 'Give me your telephone number __ I n
 INSERT INTO `paper` VALUES (3, 3, 4, 0, 1, 'Give me your telephone number __ I need your help.', 'in case', 'so that', 'unless', 'test', 'A');
 INSERT INTO `paper` VALUES (4, 3, 5, 0, 1, 'He was knocked down by a car and badly _', 'injured', 'damaged', 'hurted', 'ruined', 'C');
 INSERT INTO `paper` VALUES (5, 3, 1, 0, 1, 'The book contained a large__ of information', 'deal', 'amount', 'number', 'sum', 'B');
+INSERT INTO `paper` VALUES (15, 7, 4, 0, 1, 'Give me your telephone number __ I need your help.', 'in case', 'so that', 'unless', 'test', 'A');
+INSERT INTO `paper` VALUES (16, 7, 6, 0, 3, 'This is a test essay that needs to be redefined', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `paper` VALUES (17, 8, 9, 0, 1, 'dsa', '1', '2', '3', '4', 'A,B');
+INSERT INTO `paper` VALUES (18, 8, 1, 0, 1, 'The book contained a large__ of information', 'deal', 'amount', 'number', 'sum', 'B');
+INSERT INTO `paper` VALUES (19, 8, 6, 0, 3, 'This is a test essay that needs to be redefined', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `paper` VALUES (20, 9, 9, 0, 1, 'dsa', '1', '2', '3', '4', 'A,B');
+INSERT INTO `paper` VALUES (21, 9, 4, 0, 1, 'Give me your telephone number __ I need your help.', 'in case', 'so that', 'unless', 'test', 'A');
+INSERT INTO `paper` VALUES (22, 9, 11, 0, 3, 'this is test', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `paper` VALUES (23, 10, 1, 0, 1, 'The book contained a large__ of information', 'deal', 'amount', 'number', 'sum', 'B');
+INSERT INTO `paper` VALUES (24, 10, 11, 0, 3, 'this is test', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for pjclass
@@ -106,7 +120,7 @@ CREATE TABLE `pjclass`  (
   `classid` int(11) NOT NULL AUTO_INCREMENT,
   `classname` varchar(20) CHARACTER SET utf8 COLLATE utf8_danish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`classid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pjclass
@@ -123,7 +137,7 @@ CREATE TABLE `role`  (
   `roleid` int(11) NOT NULL AUTO_INCREMENT,
   `rolename` varchar(20) CHARACTER SET utf8 COLLATE utf8_danish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`roleid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of role
@@ -154,12 +168,16 @@ CREATE TABLE `studentexam`  (
   CONSTRAINT `fk_relationship_6` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_relationship_7` FOREIGN KEY (`classid`) REFERENCES `pjclass` (`classid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_relationship_8` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of studentexam
 -- ----------------------------
 INSERT INTO `studentexam` VALUES (1, 3, 1, 2, '2023六月六级考试', 22, 0, 10, '2023-06-03 00:56:42', 0);
+INSERT INTO `studentexam` VALUES (12, 3, 1, 7, '考试test', 16, 0, 6, '2023-06-29 10:53:27', 1);
+INSERT INTO `studentexam` VALUES (13, 3, 1, 8, '10101', 65, 0, 45, '2023-06-29 10:54:47', 1);
+INSERT INTO `studentexam` VALUES (14, 3, 1, 9, 'ceshi', 25, 0, 5, '2023-06-29 13:33:35', 1);
+INSERT INTO `studentexam` VALUES (15, 3, 1, 10, 'kaoshitest', 15, 10, 5, '2023-06-29 14:07:33', 1);
 
 -- ----------------------------
 -- Table structure for studentsubject
@@ -183,13 +201,23 @@ CREATE TABLE `studentsubject`  (
   CONSTRAINT `fk_relationship_11` FOREIGN KEY (`eid`) REFERENCES `exam` (`eid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_relationship_12` FOREIGN KEY (`sid`) REFERENCES `subject` (`sid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_relationship_9` FOREIGN KEY (`seid`) REFERENCES `studentexam` (`seid`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of studentsubject
 -- ----------------------------
 INSERT INTO `studentsubject` VALUES (1, 1, 3, 2, 4, 'D', 0, NULL);
 INSERT INTO `studentsubject` VALUES (5, 1, 3, 2, 6, '这是我的测试作文', 10, '1');
+INSERT INTO `studentsubject` VALUES (16, 12, 3, 7, 4, 'C', NULL, NULL);
+INSERT INTO `studentsubject` VALUES (17, 12, 3, 7, 6, '测试', 6, '1');
+INSERT INTO `studentsubject` VALUES (18, 13, 3, 8, 9, 'D', NULL, NULL);
+INSERT INTO `studentsubject` VALUES (19, 13, 3, 8, 1, 'D', NULL, NULL);
+INSERT INTO `studentsubject` VALUES (20, 13, 3, 8, 6, '提桶提桶拖拖拖拖拖', 45, '1');
+INSERT INTO `studentsubject` VALUES (21, 14, 3, 9, 9, 'A', NULL, NULL);
+INSERT INTO `studentsubject` VALUES (22, 14, 3, 9, 4, 'D', NULL, NULL);
+INSERT INTO `studentsubject` VALUES (23, 14, 3, 9, 11, '123', 5, '1');
+INSERT INTO `studentsubject` VALUES (24, 15, 3, 10, 1, 'B', NULL, NULL);
+INSERT INTO `studentsubject` VALUES (25, 15, 3, 10, 11, '我的答案', 5, '1');
 
 -- ----------------------------
 -- Table structure for subject
@@ -209,7 +237,7 @@ CREATE TABLE `subject`  (
   UNIQUE INDEX `scontent`(`scontent`) USING BTREE,
   INDEX `fk_relationship_5`(`cno`) USING BTREE,
   CONSTRAINT `fk_relationship_5` FOREIGN KEY (`cno`) REFERENCES `course` (`cno`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of subject
@@ -219,6 +247,8 @@ INSERT INTO `subject` VALUES (4, 1, 1, 'Give me your telephone number __ I need 
 INSERT INTO `subject` VALUES (5, 1, 1, 'He was knocked down by a car and badly _', 'injured', 'damaged', 'hurted', 'ruined', 'C');
 INSERT INTO `subject` VALUES (6, 1, 3, 'This is a test essay that needs to be redefined', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `subject` VALUES (9, 1, 1, 'dsa', '1', '2', '3', '4', 'A,B');
+INSERT INTO `subject` VALUES (11, 1, 3, 'this is test', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `subject` VALUES (13, 1, 3, 'zuowen test', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for type
@@ -228,7 +258,7 @@ CREATE TABLE `type`  (
   `stype` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_danish_ci NOT NULL,
   PRIMARY KEY (`stype`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of type
@@ -252,7 +282,7 @@ CREATE TABLE `users`  (
   UNIQUE INDEX `username`(`username`) USING BTREE,
   INDEX `fk_relationship_1`(`roleid`) USING BTREE,
   CONSTRAINT `fk_relationship_1` FOREIGN KEY (`roleid`) REFERENCES `role` (`roleid`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_danish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of users

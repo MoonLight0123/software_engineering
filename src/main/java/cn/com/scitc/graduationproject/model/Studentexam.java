@@ -14,6 +14,8 @@ public class Studentexam {
     private int zscore;
     private int score;
     private Timestamp tjtime;
+    private int status;
+    private int cpscore;
     //连表
     @Transient
     private Users users;
@@ -126,5 +128,21 @@ public class Studentexam {
     @Override
     public int hashCode() {
         return Objects.hash(seid, userid, classid, eid, pname, zscore, score, tjtime);
+    }
+
+    public int getCpscore() {
+        return cpscore;
+    }
+
+    public void setCpscore(int cpscore) {
+        this.cpscore = cpscore;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

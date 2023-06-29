@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <div th:replace="include/bootstrap :: bootstrap"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 </head>
 <body>
 <div th:replace="include/TeacherNav :: TeacherNav"></div>
@@ -134,7 +136,7 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">答案：</span>
                         <div class="col-sm-5">
-                            <select class="form-control" id="skey" name="skey">
+                            <select class="selectpicker form-control" multiple id="skey" name="skey">
                                 <option value="A">A</option>
                                 <option value="B">B</option>
                                 <option value="C">C</option>
@@ -196,7 +198,7 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon" style="height: 40px ; tab-size: 16px ">答案：</span>
                         <div class="col-sm-5">
-                            <select class="form-control" id="skey1" name="skey">
+                            <select class="selectpicker form-control" multiple id="skey1" name="skey">
                                 <option value="A">A</option>
                                 <option value="B">B</option>
                                 <option value="C">C</option>
@@ -303,7 +305,8 @@
                     $("#sb1").val(data.sb);
                     $("#sc1").val(data.sc);
                     $("#sd1").val(data.sd);
-                    $("#skey1").val(data.skey);
+                    var key = data.skey.toString().split(",");
+                    $('#skey1').selectpicker('val',key);
                     $("#cno1").val(data.cno);
                     $("#editch").modal('show');
                 },

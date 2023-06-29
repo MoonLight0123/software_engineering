@@ -53,60 +53,39 @@
 <script th:inline="javascript">
 
     function Stupaper(seid) {
-                var pname="";
-                $.ajax({
-                    url: '/findBySeid',
-                    type: 'POST',
-                    dataType: 'json',
-                    async:false,
-                    contentType: 'application/json;charset=UTF-8',
-                    data: JSON.stringify({
-                        seid: seid
-                    }),
-                    success: function (data) {
-                        pname = data.pname;
-                    },
-                    error: function () {
-                        alert("错误");
-                    }
-                });
-                if(pname!=''){
-                    $.ajax({
-                                url: '/findByPname',
-                                type: 'POST',
-                                dataType: 'json',
-                                async:false,
-                                contentType: 'application/json;charset=UTF-8',
-                                data: JSON.stringify({
-                                    pname: pname
-                                }),
-                                success: function (data) {
-                                    console.log("cg");
-                                    examtime = data.examtime;
-                                },
-                                error: function () {
-                                    alert("错误");
-                                }
-                            });
-                            //获取当前日期
-                            var date = new Date();
-                            var seperator1 = "-";
-                            var year = date.getFullYear();
-                            var month = date.getMonth() + 1;
-                            var strDate = date.getDate();
-                            if (month >= 1 && month <= 9) {
-                                month = "0" + month;
-                            }
-                            if (strDate >= 0 && strDate <= 9) {
-                                strDate = "0" + strDate;
-                            }
-                            var currentdate = year + seperator1 + month + seperator1 + strDate;
-                            if(currentdate>examtime){
-                               window.location.href="stuPaper?seid="+seid;
-                            }else {
-                                alert("该考试在进行中，请考试结束后查看！");
-                            }
+        $.ajax({
+            url: '/findBySeid',
+            type: 'POST',
+            dataType: 'json',
+            async:false,
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({
+                seid: seid
+            }),
+            success: function (data) {
+                //获取当前日期
+                var date = new Date();
+                var seperator1 = "-";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
                 }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+                var currentdate = year + seperator1 + month + seperator1 + strDate;
+                if(currentdate>data.examtime){
+                    window.location.href="stuPaper?seid="+seid;
+                }else {
+                    alert("该考试在进行中，请考试结束后查看！");
+                }
+            },
+            error: function () {
+                alert("错误");
+            }
+        });
     }
 
 </script>

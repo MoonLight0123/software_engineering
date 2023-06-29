@@ -11,6 +11,9 @@ public class Studentsubject {
     private int eid;
     private int sid;
     private String studentkey;
+
+    private Integer score;
+    private String status;
     @Transient
     private Subject subject;
     @Transient
@@ -99,5 +102,21 @@ public class Studentsubject {
     @Override
     public int hashCode() {
         return Objects.hash(ssid, seid, userid, eid, sid, studentkey);
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }
