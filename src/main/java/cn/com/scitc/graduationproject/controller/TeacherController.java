@@ -222,8 +222,8 @@ public class TeacherController {
         exam.setClassid(classid);
         exam.setSinglenumber(singlenumber);
         exam.setSinglecore(singlecore);
-        exam.setMultiplenumber(multiplenumber);
-        exam.setMultiplecore(multiplecore);
+//        exam.setMultiplenumber(multiplenumber);
+//        exam.setMultiplecore(multiplecore);
         exam.setCompositionnumber(compositionnumber);
         exam.setCompositioncore(compositioncore);
         exam.setExamdate(examdate);
@@ -259,30 +259,30 @@ public class TeacherController {
             }
         }
         //多选随机组题
-        List<Subject> multiplelsit = subjectDao.finbytype(2, cno);
-        List<Subject> resultList2 = new ArrayList<Subject>();
-        if(multiplenumber>0){
-            for(int i=1;i<=multiplenumber;i++){
-                int n1=random.nextInt(multiplelsit .size());
-                Subject q1=multiplelsit .get(n1);
-                if(resultList2 .contains(q1)){
-                    i--;
-                }else{
-                    resultList2.add(multiplelsit.get(n1));
-                    Paper p = new Paper();
-                    p.setEid(eid);
-                    p.setSid(q1.getSid());
-                    p.setStype(q1.getStype());
-                    p.setScontent(q1.getScontent());
-                    p.setSa(q1.getSa());
-                    p.setSb(q1.getSb());
-                    p.setSc(q1.getSc());
-                    p.setSd(q1.getSd());
-                    p.setSkey(q1.getSkey());
-                    paperDao.save(p);
-                }
-            }
-        }
+//        List<Subject> multiplelsit = subjectDao.finbytype(2, cno);
+//        List<Subject> resultList2 = new ArrayList<Subject>();
+//        if(multiplenumber>0){
+//            for(int i=1;i<=multiplenumber;i++){
+//                int n1=random.nextInt(multiplelsit .size());
+//                Subject q1=multiplelsit .get(n1);
+//                if(resultList2 .contains(q1)){
+//                    i--;
+//                }else{
+//                    resultList2.add(multiplelsit.get(n1));
+//                    Paper p = new Paper();
+//                    p.setEid(eid);
+//                    p.setSid(q1.getSid());
+//                    p.setStype(q1.getStype());
+//                    p.setScontent(q1.getScontent());
+//                    p.setSa(q1.getSa());
+//                    p.setSb(q1.getSb());
+//                    p.setSc(q1.getSc());
+//                    p.setSd(q1.getSd());
+//                    p.setSkey(q1.getSkey());
+//                    paperDao.save(p);
+//                }
+//            }
+//        }
 
         List<Subject> compositionlsit = subjectDao.finbytype(3, cno);
         List<Subject> resultList3 = new ArrayList<Subject>();
